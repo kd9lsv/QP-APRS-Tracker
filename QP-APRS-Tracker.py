@@ -42,10 +42,12 @@ from configparser import ConfigParser
 VERSION = "1.0.1"
 
 # APRS-IS filter command for narrowing APRS packets from within state boundaries (approximate)
-geofilter = b"#filter a/39.372680/-83.26599638/36.567059/-74.973329"
+# geofilter = b"#filter a/39.372680/-83.26599638/36.567059/-74.973329"
+geofilter = b"#filter a/35.031894/-85.735580/30.077116/-80.484568"
+# ga box: 35.031894/-85.735580/30.077116/-80.484568
 
 # regex search string for APRS packets participating in QSO Party
-qpstring = "VQP|VAQP"
+qpstring = "GAQP|GQP"
 
 # directory for www HTML files
 wwwdir = "www/"
@@ -574,6 +576,9 @@ class APRSGeoDetector(Thread):
                         self.writeCSV(self.db)
                         # self.log("Updated CSV")
 
+                        # do same up date to geojson files [cmw]
+                        self.writeJSON(self.db)
+
                     if self.wdCheck(1):
                         self.log("Timeout waiting for APRS data, re-writing data")
                         with self.lock:
@@ -1038,7 +1043,7 @@ class APRSGeoDetector(Thread):
 
             print(f"{datetime.datetime.now():%m-%d-%Y,%H%M,GMT,SPOT}", file=f)
 
-            print("QP CALL", "C&IC", "AGE", "AGE", sep=',', file=f)
+            print("QP CALL", "CNTY", "TIC", "AGE", sep=',', file=f)
 
             now = int(time.time())
 

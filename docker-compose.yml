@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  app:
+    image: gaqptracker:latest
+    volumes:
+      - ./www:/app/www
+      - ./qp-calls.txt:/app/qp-calls.txt
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - 7373:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # share files from web
+      - ./www:/static:ro
+
